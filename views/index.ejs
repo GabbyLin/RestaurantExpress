@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="viewport-fit=cover">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+    <meta property="fb:pages" content="148395741852581">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/2.4.85/css/materialdesignicons.css">
+  </head>
+  <body>
+    <!--點擊後ajax帶出database的列表，亂數篩選-->
+    <a class="btnStyle" type="submit" id="chooseRestaurant"  href="javascript:">今天吃什麼(´･ω･`)</a>
+    <div class="chooseBlock">
+      <div class="shopinfo">
+        <div class="shopName"></div>
+        <div class="shopDesc"></div>
+        <div class="shopPrice"></div>
+      </div>
+      <div class="googleMap"></div>
+    </div>
+
+    <hr>
+
+    <a href="javascript:" class="allListBtn btnStyle">店家列表 <i class="mdi mdi-chevron-down"></i></a>
+    <div class="allList">
+      <ul class="showRestaurantList"></ul>
+    </div>
+
+    
+
+    <!--點擊帶出新增和編輯btn-->
+    <div class="editRow">
+      <a class="editList btnStyle" href="javascript:" id="editList">編輯餐廳 <i class="mdi mdi-pencil"></i></a>
+      <div class="errors psmark"><%= errors %></div>
+    </div>
+
+
+    <div class="editBlock">
+      <!--新增店家post-->
+      <form action="/addRestaurant" method="post">
+        <div class="textBox">餐廳名稱：<input type="text" id="newName" name="newName"></div> 
+        <div class="textBox">餐廳地址：<input type="text" id="newAdress" name="newAdress"></div> 
+        <div class="textBox">餐廳描述：<input type="text" id="newDesc" name="newDesc"></div> 
+        <div class="textBox">價錢範圍：<input type="text" id="newPrice" name="newPrice"></div> 
+    
+        <input class="btnStyle" type="submit" id="addRestaurant" value="新增">
+      </form>
+      <a class="btnStyle cancelBtn" id="cancel" href="javascript:">取消</a>
+    </div>
+
+    <!--訂餐系統-->
+    <div class="editRow">
+      <a class="editList btnStyle" href="javascript:" id="">訂餐系統 <i class="mdi mdi-star-outline"></i></a>
+      <div class="psmark">（尚未開放）</div>
+    </div>
+
+    
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script>
+    $(function(){
+      // var jsonObj = {"0":"1","1":"2","2":"3","3":"4"};
+      // var obj = Object.keys(jsonObj).map(function(_) { return jsonObj[_]; });
+      // console.log(obj);
+
+      $('#editList').click(function(){
+        $('.editBlock').fadeIn(600);
+      });
+      $('#cancel').click(function(){
+        $('.editBlock').fadeOut(600);
+      });
+      $('.allListBtn').click(function(){
+        var allList = $('.allList');
+        if(allList.hasClass('show')){
+          allList.removeClass('show');
+          $(this).removeClass('active');
+        }else{
+          allList.addClass('show');
+          $(this).addClass('active');
+        }
+      });
+      $.ajax({
+        url:'/getRestaurantList',
+        method:'GET',
+        dataType: "json",
+        success : function(result) {  
+          console.log(result); 
+          var data = result.result;
+          var dataArray = Object.keys(data).map(function(_) { return data[_]; });//obj => array
+          var showRestaurantList = $('.showRestaurantList');
+          var str = '';
+          for(var i=0;i<dataArray.length;i++){
+            var name = dataArray[i].newName;
+            var id = dataArray[i].id;
+            var sort = i+1;
+            str += '<li><span class="sort">'+sort+'</span><span class="dot">.</span><span class="name">'+name+'</span><a class="delete" href="javascript:;" id="'+ id +'"><i class="mdi mdi-close"></i></a></li>';
+            // console.log(name);
+          }
+          showRestaurantList.html(str);
+          // console.log(dataArray);
+
+          $('#chooseRestaurant').click(function(){
+            var googleMapShow = $('.googleMap');
+            var max = result.length;
+            var num = Math.floor(Math.random()*max);
+            var adress = dataArray[num].newAdress;
+            $('.shopName').text(dataArray[num].newName);
+            $('.shopDesc').text(dataArray[num].newDesc);
+            $('.shopPrice').text(dataArray[num].newPrice);
+            $('.googleMap').html('<iframe class="iframeMap" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAgPtcx95rY5wjg6pvA-P9EFazFmuQOU_U&q='+ adress +'" allowfullscreen></iframe>')
+            // console.log(dataArray[num].newName);
+            //<iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAgPtcx95rY5wjg6pvA-P9EFazFmuQOU_U&q=忠孝西路一段中正區台北市" allowfullscreen></iframe>
+          });
+
+          $('.delete').on('click',function(e){
+              e.preventDefault();
+              var id = $(this).attr('id');
+              var name = $(this).prev('span.name').text();
+              
+              var originalData = JSON.stringify({"id":id});
+              var removeData = JSON.parse(originalData);
+              if(confirm('是否刪除'+name)){
+                $.post('/deleteRestaurant',removeData).done(function(response){
+                  // console.log(originalData);
+                  // console.log(removeData);
+                  window.location = '/';
+                });
+              }
+            
+          });
+          
+        }
+      });
+
+      
+
+    });
+    </script>
+
+  </body>
+</html>

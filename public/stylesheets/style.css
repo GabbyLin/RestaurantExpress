@@ -1,0 +1,108 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a { 
+  text-decoration: none;
+  display: inline-block;
+  -moz-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+  
+a:link { color: #232323;}
+a:visited { color:#232323;}
+a:hover {color:#9C9C9C;}
+a:active {color:#9C9C9C;}
+
+
+
+/**/
+hr {
+  display: block;
+  margin: 40px 0;
+}
+.editBlock {
+  display: none;
+  margin-top: 20px;
+  width: 250px;
+  position: relative;
+}
+.cancelBtn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+.textBox { margin-bottom: 20px;}
+.chooseRestaurant {
+  font-size: 28px;
+  margin-bottom: 10px;
+  padding: 10px 0;
+  line-height: 1;
+}
+a.chooseRestaurant:link {color:#232323; }
+a.chooseRestaurant:visited {color:#232323;}
+a.chooseRestaurant:hover { color:#999999; }
+a.chooseRestaurant:active { color:#999999; }
+.chooseRestaurant, .editList { }
+
+.editRow { margin: 20px 0 0 0;}
+
+.btnStyle {
+  padding: 10px;
+  border:1px solid #999999;
+  line-height: 1;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.delete {
+  margin-left: 10px;
+}
+
+.allListBtn.active i {
+  transform: rotate(-45deg);;
+  -webkit-transform: rotate(-45deg);
+  display: inline-block;
+}
+.allList { display: none;}
+.allList.show { display: block;}
+
+.chooseBlock { margin: 20px 0;}
+
+.showRestaurantList li {
+  list-style: none;
+}
+
+.inlineBtn {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.shopinfo > div { margin-bottom: 5px;}
+.shopinfo > div:last-child { margin-bottom: 0;}
+.shopName {
+  color: red;
+  font-size: 16px;
+}
+
+.psmark {
+  display: inline-block;
+  margin-left: 10px;
+  color: #999999;
+  font-size: 14px;
+}
+.errors.psmark {
+  color: #920000;
+}
+
+.googleMap { margin-top: 20px;}
+.iframeMap {
+  width: 600px;
+  height: 450px;
+}
+@media only screen and (max-width: 980px) {
+  .iframeMap { width: 100%;}
+}
