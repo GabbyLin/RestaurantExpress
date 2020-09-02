@@ -16,7 +16,7 @@
     "express-session": "^1.15.6",
     "express-validator": "^5.2.0",
     "firebase-admin": "^5.12.1",
-    "googleapis": "^27.0.0",
+    "googleapis": "^39.1.0",
     "googlemaps": "^1.12.0",
     "http": "0.0.0",
     "http-errors": "~1.6.2",
